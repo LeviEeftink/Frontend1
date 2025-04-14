@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './Components/header.jsx';
 import Overview from './Components/Overview.jsx';
 import CoinDetail from './Components/CoinDetail.jsx';
-
 import "tailwindcss";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
