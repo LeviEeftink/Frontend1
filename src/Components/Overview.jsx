@@ -23,23 +23,39 @@ export default function CoinList() {
     }, []);
 
     const toggleFavorite = (id) => {
-        setFavorites(prev => ({ ...prev, [id]: !prev[id] }));
+        setFavorites((prevFavorites) => {
+            const newFavorites = { ...prevFavorites };
+            if (newFavorites[id]) {
+                delete newFavorites[id];
+            } else {
+                newFavorites[id] = true;
+            }
+            return newFavorites;
+        });
     };
 
-    const handleSearch = (e) => setSearch(e.target.value);
 
-    const filteredCoins = useMemo(() => {
-        return coinData
-            .filter(({ SYMBOL, NAME }) =>
-                SYMBOL.toLowerCase().includes(search.toLowerCase()) ||
-                NAME.toLowerCase().includes(search.toLowerCase())
-            )
-            .sort((a, b) => {
-                const aFav = favorites[a.ID] ? 1 : 0;
-                const bFav = favorites[b.ID] ? 1 : 0;
-                return bFav - aFav || Number(b.market_cap) - Number(a.market_cap);
-            });
-    }, [coinData, favorites, search]);
+
+    const handleSearch = (e) => {
+        setSearch(e.target.value.toLowerCase());
+    };
+
+    const filteredCoins = coinData.filter(coin => {
+        const searchTerm = search.toLowerCase();
+        const matchesSymbol = coin.SYMBOL.toLowerCase().includes(searchTerm);
+        const matchesName = coin.NAME.toLowerCase().includes(searchTerm);
+        return matchesSymbol || matchesName;
+    }).sort((a, b) => {
+        const aFav = favorites[a.ID] ? 1 : 0;
+        const bFav = favorites[b.ID] ? 1 : 0;
+
+
+        if (aFav !== bFav) {
+            return bFav - aFav;
+        }
+
+        return Number(b.market_cap) - Number(a.market_cap);
+    });
 
     return (
         <div className="flex justify-center items-center min-h-screen">

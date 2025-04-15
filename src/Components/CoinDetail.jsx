@@ -22,7 +22,7 @@ export default function CoinDetail() {
         }
 
         const data = await response.json();
-        console.log("API Response:", data); // Debugging line
+        console.log("API Response:", data);
 
         const foundCoin = data.Data[coinId];
 
